@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlanePilot : MonoBehaviour {
 
@@ -8,6 +9,8 @@ public class PlanePilot : MonoBehaviour {
 	public float roll;
 	public float rollRatio;
 	public float flaps1SpeedDecrease = 0f;
+
+	private float terrainHeightWhereWeAre;
 
 	public GameObject AU;
 	public AudioSource VO;
@@ -24,6 +27,11 @@ public class PlanePilot : MonoBehaviour {
 	public float NoseAngle;
 	public float landingSpeed;
 
+	private Text AirspeedText;
+	private Text AltitudeText;
+	private Text WingAngleText;
+	private Text PitchText;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -33,6 +41,11 @@ public class PlanePilot : MonoBehaviour {
 		AU.AddComponent<AudioSource> ();
 		AU.GetComponent<AudioSource> ().playOnAwake = true;
 		PlayMayDay ();
+
+		AirspeedText = GameObject.Find ("AirspeedText").GetComponent<Text>();
+		AltitudeText = GameObject.Find ("AltitudeText").GetComponent<Text>();
+		WingAngleText = GameObject.Find ("WingAngleText").GetComponent<Text> ();
+		PitchText = GameObject.Find ("PitchText").GetComponent<Text> ();
 	}
 
 	// Update is called once per frame
@@ -67,7 +80,7 @@ public class PlanePilot : MonoBehaviour {
 			transform.position.z);
 
 		//Altitude Conditions
-		float terrainHeightWhereWeAre = Terrain.activeTerrain.SampleHeight (transform.position);
+		terrainHeightWhereWeAre = Terrain.activeTerrain.SampleHeight (transform.position);
 
 		if (transform.position.y < 1500f && !LowAltitudeWarningLoopPlaying) 
 		{
@@ -94,7 +107,30 @@ public class PlanePilot : MonoBehaviour {
 			ATC1 = true;
 			PlayATC1();
 		}
+		AssignHUDValues ();
 
+	}
+	void AssignHUDValues()
+	{
+		float pitchAngle = transform.rotation.eulerAngles.x;
+		float wingAngle = transform.rotation.eulerAngles.z;
+
+		//Calculate wing angle as pos
+		if (transform.rotation.eulerAngles.z > 180f) 
+		{
+			wingAngle = Mathf.Abs (360 - transform.rotation.eulerAngles.z);
+		}
+		if (transform.rotation.eulerAngles.x > 180f) 
+		{
+			Debug.Log ("Pitch adjust");
+			pitchAngle = transform.rotation.eulerAngles.x - 360f;
+		}
+		pitchAngle = pitchAngle * -1.0f;
+
+		AirspeedText.text = "Airspeed: " + speed.ToString();
+		WingAngleText.text = "Wing Angle: " + wingAngle.ToString();
+		PitchText.text = "Pitch: " + pitchAngle.ToString();
+		AltitudeText.text = "Altitude: " + (transform.position.y - terrainHeightWhereWeAre).ToString();
 	}
 	void SnapShotOfLanding()
 	{

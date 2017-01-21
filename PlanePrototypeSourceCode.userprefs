@@ -1,8 +1,8 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\TextIntro.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\PlanePilot.cs">
     <Files>
-      <File FileName="Assets\PlanePilot.cs" Line="66" Column="54" />
+      <File FileName="Assets\PlanePilot.cs" Line="127" Column="4" />
       <File FileName="Assets\TextIntro.cs" Line="48" Column="26" />
     </Files>
   </MonoDevelop.Ide.Workbench>
